@@ -6,7 +6,7 @@
           <el-input
             v-model="userInfo.mobile"
             prefix-icon="el-icon-mobile-phone"
-            type="password"
+            type="text"
             autocomplete="off"
             placeholder="请输入账号"
           />
@@ -33,8 +33,8 @@ export default {
   data() {
     return {
       userInfo: {
-        mobile: '',
-        password: '',
+        mobile: 'admin',
+        password: 'admin',
         code: ''
       },
       rules: {
