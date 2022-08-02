@@ -30,8 +30,9 @@
               <span class="show-pwd" @click="showPwd">
                 <svg-icon
                   :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
-                /> </span
-            ></template>
+                />
+              </span>
+            </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="code">
@@ -39,13 +40,14 @@
             v-model="userInfo.code"
             prefix-icon="el-icon-circle-check"
             placeholder="请输入验证码"
+            @keyup.native.enter="submitForm"
           >
             <template #suffix>
               <div><img :src="src" alt="" @click="getcode()" /></div>
             </template>
           </el-input>
         </el-form-item>
-        <el-button @click="submitForm()">登录</el-button>
+        <el-button :loading="btnloading" @click="submitForm()">登录</el-button>
       </el-form>
       <img class="logo" src="@/assets/images/loginLogo.png" alt="" />
     </div>
@@ -56,70 +58,73 @@
 export default {
   data() {
     return {
-      src: "",
-      passwordType: "password",
+      src: '',
+      passwordType: 'password',
+      btnloading: false,
       userInfo: {
-        loginName: "admin",
-        password: "admin",
-        code: "",
+        loginName: 'admin',
+        password: 'admin',
+        code: ''
       },
       rules: {
-        loginName: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        loginName: [{ required: true, message: '请输入账号', trigger: 'blur' }],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 5, max: 16, message: "密码长度为5~16位", trigger: "blue" },
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 5, max: 16, message: '密码长度为5~16位', trigger: 'blue' }
         ],
         code: [
-          { required: true, message: "请输入验证码", trigger: "blur" },
-          { len: 4, message: "验证码长度为4位", trigger: "blue" },
-        ],
-      },
-    };
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { len: 4, message: '验证码长度为4位', trigger: 'blue' }
+        ]
+      }
+    }
   },
   created() {
-    this.getcode();
+    this.getcode()
   },
   methods: {
     // 获取验证码
     async getcode() {
-      this.src = await this.$store.dispatch("user/getCodeActions");
+      this.src = await this.$store.dispatch('user/getCodeActions')
     },
 
     // 点击登录
     submitForm() {
       // 校验规则
-      this.$refs["userInfo"].validate(async (valid) => {
+      this.$refs['userInfo'].validate(async (valid) => {
         if (valid) {
           // 校验成功
-          this.userInfo.clientToken = this.$store.state.user.clientToken;
-          this.userInfo.loginType = 0;
-          await this.$store.dispatch("user/login", this.userInfo);
+          this.btnloading = true
+          this.userInfo.clientToken = this.$store.state.user.clientToken
+          this.userInfo.loginType = 0
+          await this.$store.dispatch('user/login', this.userInfo)
+          this.btnloading = false
         } else {
           // 校验失败
-          return false;
+          return false
         }
-      });
+      })
     },
 
     showPwd() {
-      if (this.passwordType === "password") {
-        this.passwordType = "";
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
       } else {
-        this.passwordType = "password";
+        this.passwordType = 'password'
       }
       this.$nextTick(() => {
-        this.$refs.password.focus();
-      });
-    },
-  },
-};
+        this.$refs.password.focus()
+      })
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
 .login_box {
   height: 100%;
   width: 100%;
-  background: url("~@/assets/images/background.png") no-repeat center;
+  background: url('~@/assets/images/background.png') no-repeat center;
   background-size: cover;
 
   // ::v-deep .el-icon-view {

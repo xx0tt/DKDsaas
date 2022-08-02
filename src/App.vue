@@ -9,3 +9,8 @@ export default {
   name: 'App'
 }
 </script>
+<style>
+::-webkit-scrollbar {
+  display: none; /* Chrome Safari */
+}
+</style>

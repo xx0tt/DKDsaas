@@ -1,5 +1,4 @@
 module.exports = {
-
   title: '帝可得',
 
   /**
@@ -12,5 +11,5 @@ module.exports = {
    * @type {boolean} true | false
    * @description Whether show the logo in sidebar
    */
-  sidebarLogo: false
+  sidebarLogo: false,
 }
