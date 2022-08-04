@@ -4,6 +4,7 @@ import getters from './getters'
 import app from './modules/app'
 import settings from './modules/settings'
 import user from './modules/user'
+import task from './modules/task'
 import vuexPersistedstate from 'vuex-persistedstate'
 
 Vue.use(Vuex)
@@ -13,17 +14,18 @@ const store = new Vuex.Store({
     app,
     settings,
     user,
+    task
   },
   getters,
   plugins: [
     vuexPersistedstate({
       reducer(state) {
         return {
-          user: state.user,
+          user: state.user
         }
-      },
-    }),
-  ],
+      }
+    })
+  ]
 })
 
 export default store

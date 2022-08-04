@@ -6,6 +6,7 @@
         @toggleClick="toggleSideBar"
       /> -->
     <img
+      v-imgError="'https:pyy-1313117903.cos.ap-guangzhou.myqcloud.com/pig1.png'"
       src="http://likede2-admin.itheima.net/img/logo.3673fab5.png"
       class="navLogo"
     />
@@ -14,17 +15,24 @@
     <div class="right-menu">
       <!-- 头像 -->
       <el-avatar
-        src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+        :src="
+          userInfo.src ||
+          'https:pyy-1313117903.cos.ap-guangzhou.myqcloud.com/pig1.png'
+        "
       ></el-avatar>
       <!-- 昵称 -->
-      <p>欢迎您, {{ $store.state.user.userInfo.userName }}</p>
+      <p>欢迎您, {{ userInfo.userName }}</p>
       <span @click="logout">退出 <i class="el-icon-caret-bottom"></i></span>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState('user', ['userInfo'])
+  },
   methods: {
     // 退出登录
     async logout() {

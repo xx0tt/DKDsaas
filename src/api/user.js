@@ -16,3 +16,10 @@ export const loginApi = (data) => {
     data
   })
 }
+
+// 获取用户基本信息
+export const getuserInfoApi = (id) => {
+  return request({
+    url: '/api/user-service/user/' + id
+  })
+}

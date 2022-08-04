@@ -14,6 +14,7 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
+import * as directives from '@/utils/directive'
 
 // set ElementUI lang to EN
 Vue.use(ElementUI, { locale })
@@ -22,9 +23,13 @@ Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false
 
+for (const key in directives) {
+  Vue.directive(key, directives[key])
+}
+
 new Vue({
   el: '#app',
   router,
   store,
-  render: (h) => h(App),
+  render: (h) => h(App)
 })

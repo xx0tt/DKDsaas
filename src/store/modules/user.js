@@ -1,6 +1,7 @@
-import { getCode, loginApi } from '@/api'
+import { getCode, getuserInfoApi, loginApi } from '@/api'
 import { Message } from 'element-ui'
 import router from '@/router'
+import { setTokenTime } from '@/utils/auth'
 
 export default {
   namespaced: true,
@@ -16,7 +17,6 @@ export default {
       state.userInfo = payload
     },
     logout(state) {
-      console.log('state')
       state.userInfo = ''
     }
   },
@@ -33,11 +33,18 @@ export default {
     // 登录
     async login(context, payload) {
       const data = await loginApi(payload)
-      console.log(data)
+
       if (!data.success) return Message.error(data.msg)
       context.commit('updateUserInfo', data)
+      setTokenTime() // 记录登录时间戳
       Message.success('登陆成功')
       router.push('/')
+    },
+
+    // 获取用户信息
+    async getMyUserInfo(context) {
+      const data = await getuserInfoApi(context.state.userInfo.userId)
+      context.commit('updateUserInfo', { ...context.state.userInfo, ...data })
     }
   }
 }
