@@ -8,7 +8,7 @@
         </el-col>
         <el-col :span="9">
           工单状态：
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="inputStatus" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -19,7 +19,9 @@
           </el-select>
         </el-col>
         <el-col :span="2">
-          <el-button icon="el-icon-search" class="header-btn">查询</el-button>
+          <el-button icon="el-icon-search" class="header-btn" @click="query"
+            >查询</el-button
+          >
         </el-col>
       </el-row>
     </el-card>
@@ -32,30 +34,37 @@ export default {
     return {
       inputNum: '',
       inputStatus: '',
-      select: '',
       options: [
         {
-          value: '选项1',
+          value: '代办',
           label: '代办'
         },
         {
-          value: '选项2',
+          value: '进行',
           label: '进行'
         },
         {
-          value: '选项3',
+          value: '取消',
           label: '取消'
         },
         {
-          value: '选项4',
+          value: '完成',
           label: '完成'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
         }
-      ],
-      value: ''
+      ]
+    }
+  },
+  methods: {
+    query() {
+      // 1:待办;2:进行;3:取消;4:完成
+
+      const index = ['代办', '进行', '取消', '完成'].findIndex(
+        (item) => item === this.inputStatus
+      )
+      this.$emit('query', {
+        taskCode: this.inputNum,
+        status: index === -1 ? '' : index + 1
+      })
     }
   }
 }

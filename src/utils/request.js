@@ -34,6 +34,8 @@ request.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401) {
       Message.error('登录过期')
+      store.commit('user/logout')
+      router.push('/login')
     } else {
       Message.error(error.message)
     }

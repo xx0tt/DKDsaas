@@ -22,6 +22,7 @@
       :visible.sync="centerDialogVisible"
       width="47%"
       @close="beforeClose"
+      destroy-on-close
     >
       <!-- 提示框内容区域 -->
       <div class="Busin-from">
@@ -57,7 +58,9 @@
 
           <el-row type="flex" align="middle">
             <span class="from-span" style="transform: translateX(59px)">
-              补单数量：</span
+              补货数量：</span
+            ><span class="replenishmentList"
+              ><i class="el-icon-notebook-2" /> 补货清单</span
             >
           </el-row>
 
@@ -118,7 +121,7 @@
             ><i style="color: red">*</i> 补货警戒线：</span
           >
           <el-input-number
-            v-model="num"
+            v-model="supplyAlert"
             controls-position="right"
             :min="1"
             :max="100"
@@ -129,7 +132,7 @@
           <el-button class="Busin-qxbtn" @click="taskVisible = false"
             >取消</el-button
           >
-          <el-button class="Busin-btn" type="warning" @click="setCordon"
+          <el-button class="Busin-btn" type="warning" @click="setsupplyAlert"
             >确认</el-button
           >
         </el-row>
@@ -139,12 +142,13 @@
 </template>
 
 <script>
+import { getsupplyAlertApi, setsupplyAlertApi } from '@/api'
 export default {
   data() {
     return {
       centerDialogVisible: false,
       taskVisible: false,
-      num: 50,
+      supplyAlert: 50,
       form: {
         innerCode: '',
         taskType: '',
@@ -165,6 +169,9 @@ export default {
       }
     }
   },
+  async created() {
+    this.supplyAlert = await getsupplyAlertApi()
+  },
   methods: {
     async submitFn() {
       try {
@@ -174,9 +181,16 @@ export default {
         console.log('表单验证失败')
       }
     },
-    // 警戒线
-    setCordon() {
-      console.log(1)
+    // 设置警戒线
+    async setsupplyAlert() {
+      try {
+        await setsupplyAlertApi(this.supplyAlert)
+        this.$message.success('设置补货警戒线成功')
+      } catch (error) {
+        this.$message.error('设置补货警戒线失败')
+      } finally {
+        this.taskVisible = false
+      }
     },
     // 弹出框关闭前执行回调
     beforeClose() {
@@ -220,6 +234,17 @@ export default {
   .el-form-item {
     transform: translateX(-20px);
     margin-bottom: 0;
+  }
+
+  .replenishmentList {
+    color: rgb(67, 104, 225);
+    margin-left: 70px;
+    font-size: 14px;
+    cursor: pointer;
+    .el-icon-notebook-2 {
+      font-size: 20px;
+      transform: translateY(3px);
+    }
   }
 }
 </style>
